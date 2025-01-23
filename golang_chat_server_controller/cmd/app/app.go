@@ -9,5 +9,5 @@ type App struct {
 func NewApp(cfg *config.Config) *App {
 	a := &App{cfg: cfg}
 
-	return a
+	return ass
 }
