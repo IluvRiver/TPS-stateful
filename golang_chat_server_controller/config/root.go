@@ -16,6 +16,9 @@ type Config struct {
 		URL      string // Kafka 서버 URL
 		ClientID string // Kafka 클라이언트 ID
 	}
+	Info struct { //포트관리
+		Port string
+	}
 }
 
 func NewConfig(path string) *Config {

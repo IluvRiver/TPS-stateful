@@ -12,6 +12,6 @@ func main() {
 	flag.Parse()
 	c := config.NewConfig(*pathFlag)
 
-	//ToDO app
-	app.NewApp(c)
+	a := app.NewApp(c)
+	a.Start()
 }
