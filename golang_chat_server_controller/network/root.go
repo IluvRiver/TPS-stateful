@@ -13,8 +13,9 @@ type Server struct {
 
 	service *service.Service
 
-	port string
-	ip   string
+	port          string
+	ip            string
+	avgServerList map[string]bool
 }
 
 func NewNetwork(service *service.Service, port string) *Server {
@@ -33,11 +34,20 @@ func NewNetwork(service *service.Service, port string) *Server {
 		},
 	}))
 
-	//registerServer(s)
-
+	s.setServerInfo()
 	return s
 }
 func (s *Server) Start() error {
 	log.Println("server starting")
 	return s.engine.Run(s.port)
+}
+
+func (s *Server) setServerInfo() {
+	if serverList, err := s.service.GetAbailableServerList(); err != nil {
+		panic(err)
+	} else {
+		for _, server := range serverList {
+			s.avgServerList[server.IP] = true
+		}
+	}
 }
