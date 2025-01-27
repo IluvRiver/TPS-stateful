@@ -12,9 +12,9 @@ type Config struct {
 		URL      string // 데이터베이스 연결 URL
 	}
 
-	Kafka struct { // Kafka 관련 설정을 담는 중첩 구조체
-		URL      string // Kafka 서버 URL
-		ClientID string // Kafka 클라이언트 ID
+	Kafka struct {
+		URL     string
+		GroupID string
 	}
 	Info struct { //포트관리
 		Port string

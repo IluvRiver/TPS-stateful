@@ -2,14 +2,12 @@ package network
 
 import (
 	"chat_server_golang/service"
-	"encoding/json"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -70,7 +68,7 @@ func (s *Server) setServerInfo() {
 				s.ip = ip.String()
 			}
 
-			//s.service.PublishServerStatusEvent(s.ip+s.port, true)
+			s.service.PublishServerStatusEvent(s.ip+s.port, true)
 
 		}
 	}
@@ -88,23 +86,9 @@ func (s *Server) StartServer() error {
 		if err := s.service.ServerSet(s.ip+s.port, false); err != nil {
 			log.Println("Failed to ServerSet", "err", err)
 		}
-		//kafka에 이벤트 전송
-		type ServerInfoEvent struct {
-			IP     string
-			Status bool
-		}
-		e := &ServerInfoEvent{IP: s.ip + s.port, Status: false}
-		ch := make(chan kafka.Event)
 
-		if v, err := json.Marshal(e); err != nil {
-			log.Println("Failed to Marshal")
-		} else if result, err := s.service.PublishEvent("chat", v, ch); err != nil {
-			//Todo send event to Kafka
-			log.Println("Failed to Send Event to Kafka", "err", err)
-		} else {
-			log.Println("Successfully Send Event to Kafka", result)
-		}
-
+		s.service.PublishServerStatusEvent(s.ip+s.port, false)
+		os.Exit(1)
 	}()
 
 	return s.engine.Run(s.port)
